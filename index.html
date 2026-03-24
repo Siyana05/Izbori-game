@@ -134,7 +134,7 @@ style="padding:12px;font-size:18px;border-radius:10px;border:none;">
 <audio id="successSound" src="success.mp3"></audio>
 
 <div id="startScreen" class="screen hidden">
-<h1>Премини лабиринта на избора</h1>
+<h1>Твоят глас има значение!</h1>
 <button class="primary" onclick="startGame()">Започни играта</button>
 </div>
 
@@ -158,14 +158,17 @@ style="padding:12px;font-size:18px;border-radius:10px;border:none;">
 </div>
 
 <script>
-    function checkPassword(){
+    const loginScreen = document.getElementById("loginScreen");
+const startScreen = document.getElementById("startScreen");
+const errorText = document.getElementById("errorText");
+
+function checkPassword(){
 
 let input = document.getElementById("passwordInput").value;
 
 if(input === "ITN2026"){
 
 loginScreen.classList.add("hidden");
-
 startScreen.classList.remove("hidden");
 
 }
