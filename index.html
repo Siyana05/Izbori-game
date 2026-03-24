@@ -243,8 +243,6 @@ questionBox.innerText=questions[index];
 
 progressBar.style.width=((index)/questions.length*100)+"%";
 
-moveHero();
-
 if(index===5){
 
 answers.innerHTML=`
@@ -301,6 +299,8 @@ else{
 finishGame();
 
 }
+}
+
 
 function finishGame(){
 
