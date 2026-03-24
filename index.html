@@ -207,8 +207,6 @@ hero.style.bottom = (60 + index * 40) + "px";
 
 }
 
-hero.style.left=(10+(index*13))+'%';
-
 
 function showQuestion(){
 
@@ -272,24 +270,6 @@ setTimeout(showQuestion, 400);
 else{
 
 finishGame();
-
-}
-
-
-if(choice!==correct[index]) mistakes++;
-
-index++;
-
-if(index<questions.length){
-
-showQuestion();
-
-}
-else{
-
-finishGame();
-
-}
 
 }
 
