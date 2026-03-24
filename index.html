@@ -115,10 +115,15 @@ pointer-events:none;
 <body>
     <div id="loginScreen" class="screen">
 
-<h1 style="color:black;">Въведете парола</h1>
+<div style="background:#0d3c91;padding:40px;border-radius:20px;text-align:center;box-shadow:0px 0px 25px rgba(0,0,0,0.5);">
+
+<h1 style="color:white;">Въведете парола</h1>
 
 <input id="passwordInput" type="password"
-style="padding:12px;font-size:18px;border-radius:10px;border:none;">
+style="padding:12px;font-size:18px;border-radius:10px;border:none;margin-top:10px;"
+onkeydown="if(event.key==='Enter') checkPassword();">
+
+<br><br>
 
 <button class="primary" onclick="checkPassword()">
 Вход
@@ -128,12 +133,14 @@ style="padding:12px;font-size:18px;border-radius:10px;border:none;">
 
 </div>
 
+</div>
+
 <canvas id="fireworks"></canvas>
 
 <audio id="clickSound" src="click.mp3"></audio>
 <audio id="successSound" src="success.mp3"></audio>
 
-<div id="startScreen" class="screen hidden">
+<div id="startScreen" class="screen" style="display:none;">
 <h1>Твоят глас има значение!</h1>
 <button class="primary" onclick="startGame()">Започни играта</button>
 </div>
@@ -160,17 +167,21 @@ style="padding:12px;font-size:18px;border-radius:10px;border:none;">
 <script>
     function checkPassword(){
 
-let loginScreen = document.getElementById("loginScreen");
-let startScreen = document.getElementById("startScreen");
-let errorText = document.getElementById("errorText");
-
 let input = document.getElementById("passwordInput").value;
 
 if(input === "ITN2026"){
 
-loginScreen.classList.add("hidden");
+document.getElementById("loginScreen").style.display="none";
 
-startScreen.classList.remove("hidden");
+document.getElementById("startScreen").style.display="flex";
+
+}
+
+else{
+
+document.getElementById("errorText").innerText="Грешна парола";
+
+}
 
 }
 
