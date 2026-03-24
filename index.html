@@ -164,12 +164,12 @@ onkeydown="if(event.key==='Enter') checkPassword();">
 <img id="resultImage" width="300">
 </div>
 
-<script>
+<script defer>
     function checkPassword(){
 
-let input = document.getElementById("passwordInput").value;
+let input=document.getElementById("passwordInput").value;
 
-if(input === "ITN2026"){
+if(input==="ITN2026"){
 
 document.getElementById("loginScreen").style.display="none";
 
@@ -180,14 +180,6 @@ document.getElementById("startScreen").style.display="flex";
 else{
 
 document.getElementById("errorText").innerText="Грешна парола";
-
-}
-
-}
-
-else{
-
-errorText.innerText = "Грешна парола";
 
 }
 
