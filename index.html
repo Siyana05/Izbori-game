@@ -113,13 +113,27 @@ pointer-events:none;
 </head>
 
 <body>
+    <div id="loginScreen" class="screen">
+
+<h1>Въведете парола</h1>
+
+<input id="passwordInput" type="password"
+style="padding:12px;font-size:18px;border-radius:10px;border:none;">
+
+<button class="primary" onclick="checkPassword()">
+Вход
+</button>
+
+<p id="errorText" style="color:red;"></p>
+
+</div>
 
 <canvas id="fireworks"></canvas>
 
 <audio id="clickSound" src="click.mp3"></audio>
 <audio id="successSound" src="success.mp3"></audio>
 
-<div id="startScreen" class="screen">
+<div id="startScreen" class="screen hidden">
 <h1>Премини лабиринта на избора</h1>
 <button class="primary" onclick="startGame()">Започни играта</button>
 </div>
@@ -144,15 +158,23 @@ pointer-events:none;
 </div>
 
 <script>
-    const password = "ITN2026";
+    function checkPassword(){
 
-let userPass = prompt("Въведете парола за достъп до играта:");
+let input = document.getElementById("passwordInput").value;
 
-if(userPass !== password){
+if(input === "ITN2026"){
 
-document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:40vh;'>Нямате достъп до играта</h1>";
+loginScreen.classList.add("hidden");
 
-throw new Error("Access denied");
+startScreen.classList.remove("hidden");
+
+}
+
+else{
+
+errorText.innerText = "Грешна парола";
+
+}
 
 }
 
