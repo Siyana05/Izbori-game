@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Твоят глас има значение!</title>
+
+<style>
+
+body {
+margin:0;
+font-family:Arial;
+background:linear-gradient(180deg,#0a2c6b,#001b44);
+color:white;
+overflow:hidden;
+}
+
+.screen {
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+transition:0.6s;
+}
+
+.hidden {
+opacity:0;
+pointer-events:none;
+}
+
+h1 {
+font-size:46px;
+margin-bottom:20px;
+}
+
+button {
+padding:14px 28px;
+margin:10px;
+border:none;
+border-radius:14px;
+font-size:18px;
+cursor:pointer;
+transition:0.25s;
+}
+
+button:hover {
+transform:scale(1.08);
+}
+
+.primary {
+background:#ffd700;
+color:black;
+}
+
+.secondary {
+background:white;
+}
+
+#questionBox {
+font-size:26px;
+max-width:700px;
+text-align:center;
+margin-bottom:20px;
+animation:fadeIn 0.6s ease;
+}
+
+.character {
+width:90px;
+position:absolute;
+bottom:40px;
+left:10%;
+transition:0.6s ease;
+}
+
+.path {
+position:absolute;
+bottom:70px;
+left:10%;
+width:80%;
+height:10px;
+background:white;
+border-radius:10px;
+}
+
+.progressBar {
+position:absolute;
+top:0;
+left:0;
+height:8px;
+background:#ffd700;
+transition:0.4s;
+}
+
+@keyframes fadeIn {
+from {opacity:0; transform:translateY(20px);} 
+
+to {opacity:1; transform:translateY(0);} 
+}
+
+canvas {
+position:absolute;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<audio id="clickSound" src="click.mp3"></audio>
+<audio id="successSound" src="success.mp3"></audio>
+
+<div id="startScreen" class="screen">
+<h1>Премини лабиринта на избора</h1>
+<button class="primary" onclick="startGame()">Започни играта</button>
+</div>
+
+<div id="gameScreen" class="screen hidden">
+
+<div class="progressBar" id="progressBar"></div>
+
+<div class="path"></div>
+
+<img src="hero.png" id="hero" class="character">
+
+<div id="questionBox"></div>
+
+<div id="answers"></div>
+
+</div>
+
+<div id="resultScreen" class="screen hidden">
+<h1 id="resultTitle"></h1>
+<img id="resultImage" width="300">
+</div>
+
+<script>
+    const password = "ITN2026";
+
+let userPass = prompt("Въведете парола за достъп до играта:");
+
+if(userPass !== password){
+
+document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:40vh;'>Нямате достъп до играта</h1>";
+
+throw new Error("Access denied");
+
+}
+
+const questions=[
+"Трябва ли да защитим децата си със всички мерки от злонамерени лица?",
+"Трябва ли да подобрим семейната среда и запазим нейните ценности?",
+"Да защитим ли работните места приоритетно за Българските граждани?",
+"Съгласни ли сте да взимаме още Държавни кредити?",
+"Искате ли да има повече референдуми и допитване до вас за важни въпроси?",
+"Какво мислите за Зелената сделка?"
+];
+
+const correct=[
+"ДА","ДА","ДА","НЕ","ДА","НЕ ПРИЕМАМ"
+];
+
+let index=0;
+let mistakes=0;
+
+function playClick(){
+clickSound.currentTime=0;
+clickSound.play();
+}
+
+function startGame(){
+
+startScreen.classList.add("hidden");
+
+gameScreen.classList.remove("hidden");
+
+showQuestion();
+
+}
+
+function moveHero(direction){
+
+let step = index * 10;
+
+if(direction === "left"){
+
+hero.style.left = (40 - step) + "%";
+
+}
+
+else if(direction === "right"){
+
+hero.style.left = (40 + step) + "%";
+
+}
+
+hero.style.bottom = (60 + index * 40) + "px";
+
+}
+
+hero.style.left=(10+(index*13))+'%';
+
+
+function showQuestion(){
+
+questionBox.innerText=questions[index];
+
+progressBar.style.width=((index)/questions.length*100)+"%";
+
+moveHero();
+
+if(index===5){
+
+answers.innerHTML=`
+<button class="secondary" onclick="answer('ПРИЕМАМ')">Приемам</button>
+<button class="secondary" onclick="answer('НЕ ПРИЕМАМ')">Не приемам</button>
+`;
+
+}
+else{
+
+answers.innerHTML=`
+<button class="secondary" onclick="answer('ДА')">Да</button>
+<button class="secondary" onclick="answer('НЕ')">Не</button>
+`;
+
+}
+
+}
+
+function answer(choice){
+
+playClick();
+
+let correctAnswer = correct[index];
+
+if(choice !== correctAnswer){
+
+mistakes++;
+
+}
+
+if(choice === "ДА" || choice === "НЕ ПРИЕМАМ"){
+
+moveHero("right");
+
+}
+
+else{
+
+moveHero("left");
+
+}
+
+index++;
+
+if(index < questions.length){
+
+setTimeout(showQuestion, 400);
+
+}
+
+else{
+
+finishGame();
+
+}
+
+
+if(choice!==correct[index]) mistakes++;
+
+index++;
+
+if(index<questions.length){
+
+showQuestion();
+
+}
+else{
+
+finishGame();
+
+}
+
+}
+
+function finishGame(){
+
+progressBar.style.width="100%";
+
+gameScreen.classList.add("hidden");
+
+resultScreen.classList.remove("hidden");
+
+if(mistakes<=2){
+
+resultTitle.innerText="Вашият избор е ИТН";
+
+resultImage.src="final.png";
+
+successSound.play();
+
+launchFireworks();
+
+}
+else{
+
+resultTitle.innerText="Вашият избор е различен";
+
+}
+
+}
+
+
+
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function launchFireworks(){
+
+for(let i=0;i<150;i++){
+
+particles.push({
+
+x:canvas.width/2,
+
+y:canvas.height/2,
+
+vx:(Math.random()-0.5)*12,
+
+vy:(Math.random()-0.5)*12,
+
+life:120
+
+});
+
+}
+
+animateFireworks();
+
+}
+
+function animateFireworks(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach(p=>{
+
+p.x+=p.vx;
+
+p.y+=p.vy;
+
+p.life--;
+
+ctx.fillStyle="gold";
+
+ctx.fillRect(p.x,p.y,4,4);
+
+});
+
+particles=particles.filter(p=>p.life>0);
+
+if(particles.length>0) requestAnimationFrame(animateFireworks);
+
+}
+
+</script>
+
+</body>
+</html>
