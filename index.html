@@ -115,6 +115,11 @@ const correct=[
 let index=0;
 let mistakes=0;
 
+function playClick(){
+clickSound.currentTime=0;
+clickSound.play();
+}
+  
 function startGame(){
 
 startScreen.classList.add("hidden");
@@ -149,7 +154,7 @@ answers.innerHTML=`
 }
 
 function answer(choice){
-
+playClick();
 if(choice!==correct[index]){
 
 mistakes++;
@@ -183,6 +188,8 @@ if(mistakes<=2){
 
 resultTitle.innerText="Вашият избор е ИТН";
 resultImage.src="final.png";
+successSound.play();
+launchFireworks();
 
 }
 
@@ -191,6 +198,62 @@ else{
 resultTitle.innerText="Вашият избор е различен";
 
 }
+
+}
+
+  const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function launchFireworks(){
+
+for(let i=0;i<150;i++){
+
+particles.push({
+
+x:canvas.width/2,
+
+y:canvas.height/2,
+
+vx:(Math.random()-0.5)*12,
+
+vy:(Math.random()-0.5)*12,
+
+life:120
+
+});
+
+}
+
+animateFireworks();
+
+}
+
+function animateFireworks(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach(p=>{
+
+p.x+=p.vx;
+
+p.y+=p.vy;
+
+p.life--;
+
+ctx.fillStyle="gold";
+
+ctx.fillRect(p.x,p.y,4,4);
+
+});
+
+particles=particles.filter(p=>p.life>0);
+
+if(particles.length>0) requestAnimationFrame(animateFireworks);
 
 }
 
