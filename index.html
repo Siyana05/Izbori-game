@@ -66,20 +66,18 @@ border-radius:10px;
 
 /* MOBILE VERSION */
 
-@media (max-width: 600px){
+@media (max-width:600px){
 
-img{
-width:60px !important;
+.character{
+width:60px;
 }
 
 button{
-font-size:18px !important;
-padding:12px 18px !important;
+font-size:18px;
 }
 
-h1, h2, h3, p{
-font-size:18px !important;
-text-align:center;
+#questionBox{
+font-size:20px;
 }
 
 }
@@ -107,7 +105,7 @@ text-align:center;
 
 <div class="path"></div>
   
-<img src="hero.png" style="width:12vw; max-width:90px;">
+<img src="hero.png" id="hero" class="character">
 
 <h2 id="questionBox"></h2>
 
