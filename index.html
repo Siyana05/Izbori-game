@@ -1,215 +1,110 @@
 <!DOCTYPE html>
 <html lang="bg">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Твоят глас има значение!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Твоят глас има значение</title>
 
 <style>
 
-body {
+body{
 margin:0;
 font-family:Arial;
 height:100vh;
 background:
-linear-gradient(180deg,#021a4f,#000814),
-url("https://www.transparenttextures.com/patterns/cubes.png");
-background-blend-mode:overlay;
+linear-gradient(180deg,#021a4f,#000814);
 color:white;
+display:flex;
+justify-content:center;
+align-items:center;
 overflow:hidden;
 }
 
-.screen {
+.screen{
 position:absolute;
-top:0;
-left:0;
 width:100%;
 height:100%;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-transition:0.6s;
-z-index:1;
 }
 
-.hidden {
-opacity:0;
-pointer-events:none;
+.hidden{
+display:none;
 }
 
-h1 {
-font-size:46px;
-margin-bottom:20px;
-}
-
-button {
+button{
 padding:14px 28px;
 margin:10px;
 border:none;
 border-radius:14px;
 font-size:18px;
 cursor:pointer;
-transition:0.25s;
-}
-
-button:hover {
-transform:scale(1.08);
-}
-
-.primary {
 background:#ffd700;
-color:black;
 }
 
-.secondary {
-background:white;
-}
-
-#questionBox {
-font-size:26px;
-max-width:700px;
-text-align:center;
-margin-bottom:20px;
-animation:fadeIn 0.6s ease;
-}
-
-.character {
-width:90px;
+.character{
+width:120px;
 position:absolute;
-bottom:40px;
+bottom:60px;
 left:10%;
-transition:0.6s ease;
+transition:0.6s;
 }
 
-.path {
+.path{
 position:absolute;
-bottom:70px;
-left:10%;
+bottom:80px;
 width:80%;
-height:10px;
+height:12px;
 background:white;
 border-radius:10px;
-}
-
-.progressBar {
-position:absolute;
-top:0;
-left:0;
-height:8px;
-background:#ffd700;
-transition:0.4s;
-}
-
-@keyframes fadeIn {
-from {opacity:0; transform:translateY(20px);} 
-
-to {opacity:1; transform:translateY(0);} 
-}
-
-canvas {
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-z-index:0;
-}
-
-body::before {
-content:"";
-position:fixed;
-width:100%;
-height:100%;
-background:
-radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 40%),
-radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05), transparent 40%);
-z-index:0;
 }
 
 </style>
 </head>
 
 <body>
-    <div id="loginScreen" class="screen">
 
-<div style="background:#0d3c91;padding:40px;border-radius:20px;text-align:center;box-shadow:0px 0px 25px rgba(0,0,0,0.5);">
+<div id="startScreen" class="screen">
 
-<h1 style="color:white;">Въведете парола</h1>
+<h1>Премини лабиринта на избора</h1>
 
-<input id="passwordInput" type="password"
-style="padding:12px;font-size:18px;border-radius:10px;border:none;margin-top:10px;"
-onkeydown="if(event.key==='Enter') checkPassword();">
-
-<br><br>
-
-<button class="primary" onclick="checkPassword()">
-Вход
-</button>
-
-<p id="errorText" style="color:red;"></p>
+<button onclick="startGame()">Започни играта</button>
 
 </div>
 
-</div>
-
-<canvas id="fireworks"></canvas>
-
-<audio id="clickSound" src="click.mp3"></audio>
-<audio id="successSound" src="success.mp3"></audio>
-
-<div id="startScreen" class="screen" style="display:none;">
-<h1>Твоят глас има значение!</h1>
-<button class="primary" onclick="startGame()">Започни играта</button>
-</div>
 
 <div id="gameScreen" class="screen hidden">
-
-<div class="progressBar" id="progressBar"></div>
 
 <div class="path"></div>
 
 <img src="hero.png" id="hero" class="character">
 
-<div id="questionBox"></div>
+<h2 id="questionBox"></h2>
 
 <div id="answers"></div>
 
 </div>
 
+
 <div id="resultScreen" class="screen hidden">
+
 <h1 id="resultTitle"></h1>
+
 <img id="resultImage" width="300">
+
 </div>
 
-<script defer>
-    function checkPassword(){
 
-let input=document.getElementById("passwordInput").value;
-
-if(input==="ITN2026"){
-
-document.getElementById("loginScreen").style.display="none";
-
-document.getElementById("startScreen").style.display="flex";
-
-}
-
-else{
-
-document.getElementById("errorText").innerText="Грешна парола";
-
-}
-
-}
+<script>
 
 const questions=[
-"Трябва ли да защитим децата си със всички мерки от злонамерени лица?",
-"Трябва ли да подобрим семейната среда и запазим нейните ценности?",
-"Да защитим ли работните места приоритетно за Българските граждани?",
-"Съгласни ли сте да взимаме още Държавни кредити?",
-"Искате ли да има повече референдуми и допитване до вас за важни въпроси?",
+"Трябва ли да защитим децата си със всички мерки?",
+"Трябва ли да подобрим семейната среда?",
+"Да защитим ли работните места за българите?",
+"Съгласни ли сте да взимаме още държавни кредити?",
+"Искате ли повече референдуми?",
 "Какво мислите за Зелената сделка?"
 ];
 
@@ -220,61 +115,33 @@ const correct=[
 let index=0;
 let mistakes=0;
 
-function playClick(){
-clickSound.currentTime=0;
-clickSound.play();
-}
-
 function startGame(){
 
 startScreen.classList.add("hidden");
-
 gameScreen.classList.remove("hidden");
 
 showQuestion();
 
 }
 
-function moveHero(direction){
-
-let step = index * 10;
-
-if(direction === "left"){
-
-hero.style.left = (40 - step) + "%";
-
-}
-
-else if(direction === "right"){
-
-hero.style.left = (40 + step) + "%";
-
-}
-
-hero.style.bottom = (60 + index * 40) + "px";
-
-}
-
-
 function showQuestion(){
 
 questionBox.innerText=questions[index];
 
-progressBar.style.width=((index)/questions.length*100)+"%";
-
 if(index===5){
 
 answers.innerHTML=`
-<button class="secondary" onclick="answer('ПРИЕМАМ')">Приемам</button>
-<button class="secondary" onclick="answer('НЕ ПРИЕМАМ')">Не приемам</button>
+<button onclick="answer('ПРИЕМАМ')">Приемам</button>
+<button onclick="answer('НЕ ПРИЕМАМ')">Не приемам</button>
 `;
 
 }
+
 else{
 
 answers.innerHTML=`
-<button class="secondary" onclick="answer('ДА')">Да</button>
-<button class="secondary" onclick="answer('НЕ')">Не</button>
+<button onclick="answer('ДА')">Да</button>
+<button onclick="answer('НЕ')">Не</button>
 `;
 
 }
@@ -283,33 +150,19 @@ answers.innerHTML=`
 
 function answer(choice){
 
-playClick();
-
-let correctAnswer = correct[index];
-
-if(choice !== correctAnswer){
+if(choice!==correct[index]){
 
 mistakes++;
 
 }
 
-if(choice === "ДА" || choice === "НЕ ПРИЕМАМ"){
-
-moveHero("right");
-
-}
-
-else{
-
-moveHero("left");
-
-}
+hero.style.left=(10+(index*12))+"%";
 
 index++;
 
-if(index < questions.length){
+if(index<questions.length){
 
-setTimeout(showQuestion, 400);
+showQuestion();
 
 }
 
@@ -318,91 +171,26 @@ else{
 finishGame();
 
 }
-}
 
+}
 
 function finishGame(){
 
-progressBar.style.width="100%";
-
 gameScreen.classList.add("hidden");
-
 resultScreen.classList.remove("hidden");
 
 if(mistakes<=2){
 
 resultTitle.innerText="Вашият избор е ИТН";
-
 resultImage.src="final.png";
 
-successSound.play();
-
-launchFireworks();
-
 }
+
 else{
 
 resultTitle.innerText="Вашият избор е различен";
 
 }
-
-}
-
-
-
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let particles=[];
-
-function launchFireworks(){
-
-for(let i=0;i<150;i++){
-
-particles.push({
-
-x:canvas.width/2,
-
-y:canvas.height/2,
-
-vx:(Math.random()-0.5)*12,
-
-vy:(Math.random()-0.5)*12,
-
-life:120
-
-});
-
-}
-
-animateFireworks();
-
-}
-
-function animateFireworks(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-particles.forEach(p=>{
-
-p.x+=p.vx;
-
-p.y+=p.vy;
-
-p.life--;
-
-ctx.fillStyle="gold";
-
-ctx.fillRect(p.x,p.y,4,4);
-
-});
-
-particles=particles.filter(p=>p.life>0);
-
-if(particles.length>0) requestAnimationFrame(animateFireworks);
 
 }
 
